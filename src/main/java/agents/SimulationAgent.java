@@ -2,26 +2,38 @@ package agents;
 
 import de.tudresden.sumo.cmd.Simulation;
 import de.tudresden.sumo.cmd.Vehicle;
+import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
 import it.polito.appeal.traci.TraCIException;
 import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
+import javafx.application.Platform;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SimulationAgent extends Agent {
 
     static String sumo_bin = "/opt/local/bin/sumo-gui";
     static final String config_file = "/Users/tobiao/dev/projects/TrafficMAS/src/main/simulation/config.sumo.cfg";
 
+    private ArrayList<String> agentsIds = new ArrayList<>();
+    //start Simulation
+    private SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
+    private int finalStep = 6000;
+    private int currentStep = 0;
+
     protected void setup() {
         parseArguments();
+        setupSimulation();
         setupBehaviours();
+    }
 
-        //        //start Simulation
-        SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
-//
-//        //set some options
-        conn.addOption("step-length", "0.1"); //timestep 100 ms
+    private void setupSimulation() {
+        //        set some options
+        conn.addOption("step-length", "0.01"); //timestep 100 ms
 
-        try{
+        try {
 
             //start TraCI
             conn.runServer();
@@ -29,26 +41,8 @@ public class SimulationAgent extends Agent {
             //load routes and initialize the simulation
             conn.do_timestep();
 
-            for(int i=0; i<3600; i++){
-
-                //current simulation time
-                int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
-
-                conn.do_job_set(Vehicle.add("veh"+i, "car", "s1", simtime, 0, 13.8, (byte) 1));
-                conn.do_job_set(Vehicle.setMinGap("veh"+i, 5));
-
-                conn.do_timestep();
-
-                Object v = conn.do_job_get(Vehicle.getMaxSpeed("veh" + i));
-                System.out.println(v);
-
-            }
-
-            //stop TraCI
-            conn.close();
-
-        } catch (TraCIException traCIException) {
-            traCIException.printStackTrace();
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
         } catch(Exception ex) {
             ex.printStackTrace();
         }
@@ -79,21 +73,48 @@ public class SimulationAgent extends Agent {
 //        });
 //
 //
-//        addBehaviour(new TickerBehaviour(this, 1000) {
-//            @Override
-//            protected void onTick() {
-//
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        LatLong currentCoordinates = new LatLong(current.latitude, current.longitude);
-////                        LatLong lastCoordinates = new LatLong(last.latitude, last.longitude);
-//////                        mm.drawDot(currentCoordinates);
-////                        mm.drawLine(lastCoordinates, currentCoordinates, currentColor);
-//                    }
-//                });
-//            }
-//        });
+
+        addBehaviour(new TickerBehaviour(this, 1) {
+            @Override
+            protected void onTick() {
+                try {
+
+                    //current simulation time
+                    int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
+
+                    conn.do_job_set(Vehicle.add("veh" + currentStep, "car", "s1", simtime, 0, 11.7, (byte) 1));
+
+                    conn.do_timestep();
+
+                    conn.do_job_set(Vehicle.setSpeed("veh"+currentStep, 2));
+
+                    try {
+                        SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
+                        for (String name: v) {
+                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
+                            System.out.println(name + " pedzi: " + currentSpeed);
+                        }
+                        System.out.println();
+                    } catch (TraCIException traCIException) {
+//                    traCIException.printStackTrace();
+                    }
+
+                    //stop TraCI
+                    if (currentStep == finalStep) {
+                        conn.close();
+                    } else {
+                        currentStep++;
+                    }
+
+                } catch (IOException ioexception) {
+                    ioexception.printStackTrace();
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
 //        addBehaviour(new CyclicBehaviour(this) {
 //            public void action() {
 //                ACLMessage msg = receive();
