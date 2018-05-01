@@ -8,6 +8,7 @@ import it.polito.appeal.traci.TraCIException;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import javafx.application.Platform;
+import managers.AgentsEnvironmentManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class SimulationAgent extends Agent {
     static String sumo_bin = "/opt/local/bin/sumo-gui";
     static final String config_file = "/Users/tobiao/dev/projects/TrafficMAS/src/main/simulation/config.sumo.cfg";
 
+    private AgentsEnvironmentManager aem;
     private ArrayList<String> agentsIds = new ArrayList<>();
     //start Simulation
     private SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
@@ -27,6 +29,14 @@ public class SimulationAgent extends Agent {
         parseArguments();
         setupSimulation();
         setupBehaviours();
+    }
+
+    private void parseArguments() {
+        Object[] args = getArguments();
+        if (args != null) {
+            aem = (AgentsEnvironmentManager) args[0];
+//            longitude = (double) args[2];
+        }
     }
 
     private void setupSimulation() {
@@ -45,14 +55,6 @@ public class SimulationAgent extends Agent {
             ioexception.printStackTrace();
         } catch(Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void parseArguments() {
-        Object[] args = getArguments();
-        if (args != null) {
-//            latitude = (double) args[1];
-//            longitude = (double) args[2];
         }
     }
 
@@ -83,6 +85,7 @@ public class SimulationAgent extends Agent {
                     int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
 
                     conn.do_job_set(Vehicle.add("veh" + currentStep, "car", "s1", simtime, 0, 11.7, (byte) 1));
+                    aem.addAgentToMainContainer("veh"+currentStep, HelloAgent.class.getName(), null);
 
                     conn.do_timestep();
 

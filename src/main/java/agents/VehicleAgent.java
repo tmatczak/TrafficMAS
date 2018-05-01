@@ -20,7 +20,7 @@ public class VehicleAgent extends Agent {
     private void parseArguments() {
         Object[] args = getArguments();
         if (args != null) {
-            vehicleId = (String) args[1];
+            vehicleId = (String) args[0];
 //            longitude = (double) args[2];
         }
     }
