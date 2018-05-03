@@ -5,10 +5,16 @@ import de.tudresden.sumo.cmd.Vehicle;
 import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
 import it.polito.appeal.traci.TraCIException;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.lang.acl.ACLMessage;
 import javafx.application.Platform;
 import managers.AgentsEnvironmentManager;
+import utils.DefaultAgentMessages;
+import utils.DefaultAgentName;
+import utils.SimpleMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,20 +90,44 @@ public class SimulationAgent extends Agent {
                     //current simulation time
                     int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
 
-                    conn.do_job_set(Vehicle.add("veh" + currentStep, "car", "s1", simtime, 0, 11.7, (byte) 1));
-                    aem.addAgentToMainContainer("veh"+currentStep, HelloAgent.class.getName(), null);
+                    if (currentStep % 500 == 0) {
+
+                        String vehId = "veh" + currentStep;
+                        agentsIds.add(vehId);
+
+                        conn.do_job_set(Vehicle.add(vehId, "car", "s1", simtime, 0, 11.7, (byte) 0));
+
+                        Object[] parameters = { vehId };
+
+                        aem.addAgentToMainContainer(vehId, VehicleAgent.class.getName(), parameters);
+
+//                        conn.do_job_set(Vehicle.setSpeed(vehId, 2));
+//                        conn.do_job_set(Vehicle.changeLane(vehId, (byte) 1, 1000));
+
+//                        conn.do_job_set(Vehicle.slowDown(vehId, 2, 1000));
+                    }
 
                     conn.do_timestep();
 
-                    conn.do_job_set(Vehicle.setSpeed("veh"+currentStep, 2));
-
                     try {
                         SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
-                        for (String name: v) {
-                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
-                            System.out.println(name + " pedzi: " + currentSpeed);
+//                        for (String name: v) {
+//                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
+//                            System.out.println(name + " pedzi: " + currentSpeed);
+//                        }
+
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.addAll(agentsIds);
+                        temp.removeAll(v);
+
+                        if (!temp.isEmpty()) {
+                            for (String agentName: temp) {
+                                System.out.println("Do usuniecia: " + agentName);
+                                sendMessage(agentName, DefaultAgentMessages.DESTROY);
+                            }
+                            agentsIds.removeAll(temp);
                         }
-                        System.out.println();
+
                     } catch (TraCIException traCIException) {
 //                    traCIException.printStackTrace();
                     }
@@ -105,6 +135,7 @@ public class SimulationAgent extends Agent {
                     //stop TraCI
                     if (currentStep == finalStep) {
                         conn.close();
+                        myAgent.doDelete();
                     } else {
                         currentStep++;
                     }
@@ -126,7 +157,7 @@ public class SimulationAgent extends Agent {
 //                        @Override
 //                        public void action() {
 //                            try {
-//                                ACLMessage msghg = new ACLMessage(ACLMessage.INFORM);
+//                                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 //                                SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), CustomGuiEvent.DELETE_AGENT);
 //                                msg.setContentObject(sm);
 //                                msg.addReceiver(new AID(DefaultAgentName.CUSTOM_GUI_AGENT, AID.ISLOCALNAME));
@@ -142,5 +173,22 @@ public class SimulationAgent extends Agent {
 //            }
 //        });
 
+    }
+
+    private void sendMessage(String agentName, int event) {
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
+                try {
+                    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                    SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), event);
+                    msg.setContentObject(sm);
+                    msg.addReceiver(new AID(agentName, AID.ISLOCALNAME));
+                    send(msg);
+                } catch (IOException e) {
+                    System.out.println("Exception in SimulationAgent ");
+                }
+            }
+        });
     }
 }
