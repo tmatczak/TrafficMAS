@@ -82,7 +82,7 @@ public class SimulationAgent extends Agent {
 //
 //
 
-        addBehaviour(new TickerBehaviour(this, 1) {
+        addBehaviour(new TickerBehaviour(this, 10) {
             @Override
             protected void onTick() {
                 try {
@@ -97,7 +97,7 @@ public class SimulationAgent extends Agent {
 
                         conn.do_job_set(Vehicle.add(vehId, "car", "s1", simtime, 0, 11.7, (byte) 0));
 
-                        Object[] parameters = { vehId };
+                        Object[] parameters = { vehId, conn };
 
                         aem.addAgentToMainContainer(vehId, VehicleAgent.class.getName(), parameters);
 
@@ -115,6 +115,7 @@ public class SimulationAgent extends Agent {
 //                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
 //                            System.out.println(name + " pedzi: " + currentSpeed);
 //                        }
+
 
                         ArrayList<String> temp = new ArrayList<>();
                         temp.addAll(agentsIds);
