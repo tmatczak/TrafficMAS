@@ -5,10 +5,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -37,7 +37,7 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
+            <state relative-caret-position="300">
               <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -51,12 +51,10 @@
       <file leaf-file-name="SimulationAgent.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="69">
-              <caret line="84" column="49" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
+            <state relative-caret-position="460">
+              <caret line="121" column="38" selection-start-line="121" selection-start-column="29" selection-end-line="121" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#6466#7055#0" expanded="true" />
-                <element signature="e#7054#7055#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -83,8 +81,8 @@
       <file leaf-file-name="VehicleAgent.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-51">
-              <caret line="77" column="70" selection-start-line="77" selection-start-column="70" selection-end-line="77" selection-end-column="70" />
+            <state relative-caret-position="190">
+              <caret line="76" column="88" selection-start-line="76" selection-start-column="88" selection-end-line="76" selection-end-column="88" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,7 +93,7 @@
       <file leaf-file-name="AgentsEnvironmentManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/managers/AgentsEnvironmentManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="360">
               <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -107,7 +105,7 @@
       <file leaf-file-name="HelloAgent.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/agents/HelloAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
+            <state relative-caret-position="75">
               <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -150,8 +148,8 @@
         <option value="$PROJECT_DIR$/src/main/java/agents/HelloAgent.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/DefaultAgentMessages.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/SimpleMessage.java" />
-        <option value="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" />
         <option value="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" />
       </list>
     </option>
   </component>
@@ -168,8 +166,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -238,7 +237,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -354,10 +352,9 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5014641" side_tool="true" weight="0.32886904" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49853587" visible="true" weight="0.32886904" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32937685" />
-      <window_info anchor="right" id="Coverage" side_tool="true" weight="0.329429" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49853587" weight="0.48363096" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49853587" weight="0.32886904" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.215959" />
@@ -365,12 +362,13 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Coverage" order="4" side_tool="true" weight="0.329429" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
     </layout>
@@ -445,8 +443,6 @@
           <caret line="128" column="25" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6466#7055#0" expanded="true" />
-            <element signature="e#7054#7055#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -496,8 +492,6 @@
           <caret line="128" column="25" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6466#7055#0" expanded="true" />
-            <element signature="e#7054#7055#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -580,8 +574,6 @@
           <caret line="128" column="25" selection-start-line="128" selection-start-column="25" selection-end-line="128" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6466#7055#0" expanded="true" />
-            <element signature="e#7054#7055#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -657,8 +649,6 @@
           <caret line="87" selection-start-line="87" selection-end-line="87" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6466#7055#0" expanded="true" />
-            <element signature="e#7054#7055#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -823,7 +813,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/agents/HelloAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="75">
           <caret line="7" column="26" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -835,7 +825,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/managers/AgentsEnvironmentManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
+        <state relative-caret-position="360">
           <caret line="30" column="16" selection-start-line="30" selection-start-column="16" selection-end-line="30" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -845,20 +835,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
+        <state relative-caret-position="300">
           <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#236#237#0" expanded="true" />
             <element signature="e#262#263#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/DefaultAgentMessages.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -869,22 +852,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/DefaultAgentMessages.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="40" selection-start-line="3" selection-start-column="40" selection-end-line="3" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="84" column="49" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
+        <state relative-caret-position="460">
+          <caret line="121" column="38" selection-start-line="121" selection-start-column="29" selection-end-line="121" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#6466#7055#0" expanded="true" />
-            <element signature="e#7054#7055#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="77" column="70" selection-start-line="77" selection-start-column="70" selection-end-line="77" selection-end-column="70" />
+        <state relative-caret-position="190">
+          <caret line="76" column="88" selection-start-line="76" selection-start-column="88" selection-end-line="76" selection-end-column="88" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

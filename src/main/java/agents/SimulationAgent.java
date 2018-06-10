@@ -82,7 +82,7 @@ public class SimulationAgent extends Agent {
 //
 //
 
-        addBehaviour(new TickerBehaviour(this, 10) {
+        addBehaviour(new TickerBehaviour(this, 1) {
             @Override
             protected void onTick() {
                 try {
@@ -177,19 +177,20 @@ public class SimulationAgent extends Agent {
     }
 
     private void sendMessage(String agentName, int event) {
-        addBehaviour(new OneShotBehaviour() {
-            @Override
-            public void action() {
+//        addBehaviour(new OneShotBehaviour() {
+//            @Override
+//            public void action() {
                 try {
                     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                    SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), event);
+//                    SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), event);
+                    SimpleMessage sm = new SimpleMessage("hehe", event); //TODO: change message object
                     msg.setContentObject(sm);
                     msg.addReceiver(new AID(agentName, AID.ISLOCALNAME));
                     send(msg);
                 } catch (IOException e) {
                     System.out.println("Exception in SimulationAgent ");
                 }
-            }
-        });
+//            }
+//        });
     }
 }

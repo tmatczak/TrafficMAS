@@ -1,7 +1,10 @@
 package agents;
 
+import de.tudresden.sumo.cmd.Edge;
+import de.tudresden.sumo.cmd.Route;
 import de.tudresden.sumo.cmd.Simulation;
 import de.tudresden.sumo.cmd.Vehicle;
+import de.tudresden.ws.container.SumoPosition2D;
 import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
 import it.polito.appeal.traci.TraCIException;
@@ -64,27 +67,46 @@ public class VehicleAgent extends Agent {
 //        });
 //
 //
-
-        addBehaviour(new TickerBehaviour(this, 50) {
+        TickerBehaviour tickerBehaviour = new TickerBehaviour(this, 50) {
             @Override
             protected void onTick() {
                 try {
-                    double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
-
-                    if (currentSpeed > 10.0 && !isSlowing) {
-                        System.out.println(vehicleId + " zwalnia z " + currentSpeed);
-                        conn.do_job_set(Vehicle.slowDown(vehicleId, 5, 1000));
-                    } else if (currentSpeed < 5.1) {
-                        System.out.println(vehicleId + " przyspiesza ");
-                        isSlowing = false;
+                    SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
+                    if (v.contains(vehicleId)) {
+                        String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
+                        System.out.println(vehicleId + "is on road with id: " + roadId);
+                    } else {
+                        myAgent.removeBehaviour(this);
                     }
+//                    String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
+////                    String roadId = (String) conn.do_job_get(Vehicle.getLeader(vehicleId, 100));
+//                    System.out.println(vehicleId + "is on road with id: " + roadId);
+////                    SumoStringList vehiclesIds = (SumoStringList) conn.do_job_get(Edge.getLastStepVehicleIDs(roadId));
+////                    System.out.println();
+////                    for (String name: vehiclesIds) {
+////                        System.out.print(name + ", ");
+////                    }
+//
+////                    SumoPosition2D position = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(vehicleId));
+////                    System.out.println(vehicleId + " is at " + position.toString());
+////                    double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
+////
+////                    if (currentSpeed > 10.0 && !isSlowing) {
+////                        System.out.println(vehicleId + " zwalnia z " + currentSpeed);
+////                        conn.do_job_set(Vehicle.slowDown(vehicleId, 5, 1000));
+////                    } else if (currentSpeed < 5.1) {
+////                        System.out.println(vehicleId + " przyspiesza ");
+////                        isSlowing = false;
+////                    }
                 } catch (IllegalStateException i) {
 //                    System.out.println("Connection is closed");
                 }  catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        });
+        };
+
+        addBehaviour(tickerBehaviour);
 
         addBehaviour(new CyclicBehaviour(this) {
             public void action() {
