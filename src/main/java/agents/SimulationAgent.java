@@ -28,7 +28,7 @@ public class SimulationAgent extends Agent {
     private ArrayList<String> agentsIds = new ArrayList<>();
     //start Simulation
     private SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
-    private int finalStep = 6000;
+    private int finalStep = 4000;
     private int currentStep = 0;
 
     protected void setup() {
@@ -47,7 +47,7 @@ public class SimulationAgent extends Agent {
 
     private void setupSimulation() {
         //        set some options
-        conn.addOption("step-length", "0.01"); //timestep 100 ms
+        conn.addOption("step-length", "0.05"); //timestep 200 ms
 
         try {
 
@@ -90,7 +90,7 @@ public class SimulationAgent extends Agent {
                     //current simulation time
                     int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
 
-                    if (currentStep % 500 == 0) {
+                    if (currentStep !=  finalStep && currentStep % 100 == 0) {
 
                         String vehId = "veh" + currentStep;
                         agentsIds.add(vehId);
@@ -177,9 +177,9 @@ public class SimulationAgent extends Agent {
     }
 
     private void sendMessage(String agentName, int event) {
-//        addBehaviour(new OneShotBehaviour() {
-//            @Override
-//            public void action() {
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
                 try {
                     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 //                    SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), event);
@@ -190,7 +190,7 @@ public class SimulationAgent extends Agent {
                 } catch (IOException e) {
                     System.out.println("Exception in SimulationAgent ");
                 }
-//            }
-//        });
+            }
+        });
     }
 }
