@@ -12,7 +12,6 @@ import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import managers.AgentsEnvironmentManager;
 import utils.DefaultAgentMessages;
-import utils.DefaultAgentName;
 import utils.SimpleMessage;
 
 import java.io.IOException;
@@ -27,6 +26,8 @@ public class SimulationAgent extends Agent {
     // WINDOWS PATHS
     static String sumo_bin = "C:/Users/tobia/pmag/sumo-0.32.0/bin/sumo-gui";
     static final String config_file = "C:/Users/tobia/pmag/TrafficMAS/src/main/simulation/config.sumo.cfg";
+
+    private static int NEW_VEHICLE_INTERVAL = 50;
 
     private AgentsEnvironmentManager aem;
     private ArrayList<String> agentsIds = new ArrayList<>();
@@ -51,7 +52,7 @@ public class SimulationAgent extends Agent {
 
     private void setupSimulation() {
         //        set some options
-        conn.addOption("step-length", "0.02"); //timestep 200 ms
+        conn.addOption("step-length", "0.1"); //timestep 100 ms
 
         try {
 
@@ -90,60 +91,19 @@ public class SimulationAgent extends Agent {
             @Override
             protected void onTick() {
                 try {
-
                     //current simulation time
                     int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
 
-                    if (currentStep !=  finalStep && currentStep % 100 == 0) {
-
-                        String vehId = "veh" + currentStep;
-                        agentsIds.add(vehId);
-
-                        conn.do_job_set(Vehicle.add(vehId, "car", "s1", simtime, 0, 11.7, (byte) 0));
-
-                        Object[] parameters = { vehId, conn };
-
-                        aem.addAgentToMainContainer(vehId, VehicleAgent.class.getName(), parameters);
-
-//                        conn.do_job_set(Vehicle.setSpeed(vehId, 2));
-//                        conn.do_job_set(Vehicle.changeLane(vehId, (byte) 1, 1000));
-
-//                        conn.do_job_set(Vehicle.slowDown(vehId, 2, 1000));
+                    if (currentStep !=  finalStep && currentStep % NEW_VEHICLE_INTERVAL == 0) {
+                        addNewVehicleToSimulation(simtime);
                     }
 
                     conn.do_timestep();
 
-                    try {
-                        SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
-//                        for (String name: v) {
-//                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
-//                            System.out.println(name + " pedzi: " + currentSpeed);
-//                        }
-
-
-                        ArrayList<String> temp = new ArrayList<>();
-                        temp.addAll(agentsIds);
-                        temp.removeAll(v);
-
-                        if (!temp.isEmpty()) {
-                            for (String agentName: temp) {
-                                System.out.println("Do usuniecia: " + agentName);
-                                sendMessage(agentName, DefaultAgentMessages.DESTROY);
-                            }
-                            agentsIds.removeAll(temp);
-                        }
-
-                    } catch (TraCIException traCIException) {
-//                    traCIException.printStackTrace();
-                    }
+                    removeAgentsWithoutVehiclesInSimulation();
 
                     //stop TraCI
-                    if (currentStep == finalStep) {
-                        conn.close();
-                        myAgent.doDelete();
-                    } else {
-                        currentStep++;
-                    }
+                    goToNextStepIfPossible(myAgent);
 
                 } catch (IOException ioexception) {
                     ioexception.printStackTrace();
@@ -152,7 +112,6 @@ public class SimulationAgent extends Agent {
                 }
             }
         });
-
 
 //        addBehaviour(new CyclicBehaviour(this) {
 //            public void action() {
@@ -196,5 +155,57 @@ public class SimulationAgent extends Agent {
                 }
             }
         });
+    }
+
+    private void addNewVehicleToSimulation(int simtime) {
+
+        try {
+            String vehId = "veh" + currentStep;
+            agentsIds.add(vehId);
+
+            conn.do_job_set(Vehicle.add(vehId, "car", "s1", simtime, 0, 11.7, (byte) 0));
+
+            Object[] parameters = { vehId, conn };
+
+            aem.addAgentToMainContainer(vehId, VehicleAgent.class.getName(), parameters);
+
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void removeAgentsWithoutVehiclesInSimulation() {
+        try {
+            SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
+            ArrayList<String> temp = new ArrayList<>();
+            temp.addAll(agentsIds);
+            temp.removeAll(v);
+
+            if (!temp.isEmpty()) {
+                for (String agentName: temp) {
+                    System.out.println("Do usuniecia: " + agentName);
+                    sendMessage(agentName, DefaultAgentMessages.DESTROY);
+                }
+                agentsIds.removeAll(temp);
+            }
+
+        } catch (TraCIException traCIException) {
+//                    traCIException.printStackTrace();
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void goToNextStepIfPossible(Agent agent) {
+        if (currentStep == finalStep) {
+            conn.close();
+            agent.doDelete();
+        } else {
+            currentStep++;
+        }
     }
 }

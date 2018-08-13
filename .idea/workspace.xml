@@ -2,29 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db86660c-d0e5-4116-b4b4-1ca1e164d60a" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/APDescription.txt" beforeDir="false" afterPath="$PROJECT_DIR$/APDescription.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MTPs-Main-Container.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MTPs-Main-Container.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TrafficMAS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TrafficMAS.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/agents/HelloAgent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/HelloAgent$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/agents/HelloAgent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/HelloAgent.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/SimulationAgent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/SimulationAgent.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/agents/VehicleAgent.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/agents/VehicleAgent.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/managers/AgentsEnvironmentManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/managers/AgentsEnvironmentManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/DefaultAgentMessages.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/DefaultAgentMessages.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/DefaultAgentName.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/DefaultAgentName.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/LaneDistance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/LaneDistance.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/RoadPosition.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/RoadPosition.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/SimpleMessage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/SimpleMessage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/utils/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/Utils.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -47,12 +33,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="22" />
+          <entry key="java" value="817" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="22" />
+          <entry key="JAVA" value="817" />
         </counts>
       </usages-collector>
     </session>
@@ -68,25 +54,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="23" column="79" selection-start-line="23" selection-start-column="79" selection-end-line="23" selection-end-column="79" />
+            <state relative-caret-position="375">
+              <caret line="102" column="62" selection-start-line="102" selection-start-column="62" selection-end-line="102" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1982#2029#0" />
+                <element signature="e#5261#5311#0" />
+                <element signature="e#5682#6377#0" expanded="true" />
+                <element signature="e#6376#6377#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="323">
+              <caret line="75" column="70" selection-start-line="75" selection-start-column="70" selection-end-line="75" selection-end-column="70" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1302#1317#0" />
+                <element signature="e#1782#1829#0" />
+                <element signature="class#6051:9592" />
               </folding>
             </state>
           </provider>
@@ -95,8 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/utils/RoadPosition.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+            <state relative-caret-position="153">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -132,6 +125,9 @@
     <findStrings>
       <find>sendMessage</find>
       <find>isSlowing</find>
+      <find>do usu</find>
+      <find>agentsIds</find>
+      <find>simtime</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -152,15 +148,15 @@
         <option value="$PROJECT_DIR$/src/main/java/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/LaneDistance.java" />
         <option value="$PROJECT_DIR$/src/main/java/utils/RoadPosition.java" />
-        <option value="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" />
         <option value="$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="22" />
-    <option name="width" value="1366" />
-    <option name="height" value="746" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-7" />
+    <option name="width" value="1642" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -333,10 +329,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
+    <frame x="-7" y="0" width="1642" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.113672495" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18078382" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -345,7 +341,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49853587" visible="true" weight="0.48264644" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49853587" weight="0.48192772" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -353,7 +349,7 @@
       <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49853587" weight="0.32886904" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5014641" side_tool="true" weight="0.32886904" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32937685" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49853587" weight="0.3308026" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49853587" weight="0.33077765" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -490,17 +486,17 @@
       </provider>
     </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/java.base/java/lang/Enum.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/RoadPosition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -511,29 +507,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/Utils.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/RoadPosition.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="153">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/agents/SimulationAgent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="23" column="79" selection-start-line="23" selection-start-column="79" selection-end-line="23" selection-end-column="79" />
+        <state relative-caret-position="375">
+          <caret line="102" column="62" selection-start-line="102" selection-start-column="62" selection-end-line="102" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1982#2029#0" />
+            <element signature="e#5261#5311#0" />
+            <element signature="e#5682#6377#0" expanded="true" />
+            <element signature="e#6376#6377#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/agents/VehicleAgent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="75" column="70" selection-start-line="75" selection-start-column="70" selection-end-line="75" selection-end-column="70" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1302#1317#0" />
+            <element signature="e#1782#1829#0" />
+            <element signature="class#6051:9592" />
           </folding>
         </state>
       </provider>

@@ -97,8 +97,18 @@ public class VehicleAgent extends Agent {
                             String frontVehId = frontVehicles[RoadPosition.CENTER.ordinal()];
                             double frontVehiclePosition = (double) conn.do_job_get(Vehicle.getLanePosition(frontVehId));
                             double distanceBetweenVehicles = Math.abs(frontVehiclePosition - ownPositionOnLane);
-                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
+//                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
 
+                            double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
+                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId));
+
+//                            double timeToCollision = (Math.sqrt(Math.pow(tempSpeed, 2) - 2 * tempAccel * distanceBetweenVehicles) - tempSpeed) / tempAccel;
+                            double timeToCollision = distanceBetweenVehicles / tempSpeed;
+
+                            System.out.println();
+                            System.out.println(vehicleId + " speed: " + tempSpeed + " and acceleration: " + tempAccel + ", distance is equal to: " + distanceBetweenVehicles);
+                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Collision occur in " + timeToCollision + " seconds.");
+                            System.out.println();
                         }
 
 //                        System.out.println();
@@ -117,26 +127,6 @@ public class VehicleAgent extends Agent {
                     } else {
                         myAgent.removeBehaviour(this);
                     }
-//                    String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
-////                    String roadId = (String) conn.do_job_get(Vehicle.getLeader(vehicleId, 100));
-//                    System.out.println(vehicleId + "is on road with id: " + roadId);
-////                    SumoStringList vehiclesIds = (SumoStringList) conn.do_job_get(Edge.getLastStepVehicleIDs(roadId));
-////                    System.out.println();
-////                    for (String name: vehiclesIds) {
-////                        System.out.print(name + ", ");
-////                    }
-//
-////                    SumoPosition2D position = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(vehicleId));
-////                    System.out.println(vehicleId + " is at " + position.toString());
-////                    double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
-////
-////                    if (currentSpeed > 10.0 && !isSlowing) {
-////                        System.out.println(vehicleId + " zwalnia z " + currentSpeed);
-////                        conn.do_job_set(Vehicle.slowDown(vehicleId, 5, 1000));
-////                    } else if (currentSpeed < 5.1) {
-////                        System.out.println(vehicleId + " przyspiesza ");
-////                        isSlowing = false;
-////                    }
                 } catch (IllegalStateException i) {
 //                    System.out.println("Connection is closed");
                 }  catch (Exception e) {
@@ -145,9 +135,74 @@ public class VehicleAgent extends Agent {
             }
         };
 
-        addBehaviour(tickerBehaviour);
+        CyclicBehaviour cyclicBehaviour = new CyclicBehaviour(this) {
+            public void action() {
+                try {
+                    SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
+                    if (v.contains(vehicleId)) {
+                        String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
 
-        addBehaviour(new CyclicBehaviour(this) {
+//                        SumoPosition2D ownPosition = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(vehicleId));
+                        String ownLaneId = (String) conn.do_job_get(Vehicle.getLaneID(vehicleId));
+                        int ownLaneIndex = (int) conn.do_job_get(Vehicle.getLaneIndex(vehicleId));
+                        double ownPositionOnLane = (double) conn.do_job_get(Vehicle.getLanePosition(vehicleId));
+                        SumoStringList vehiclesIds = (SumoStringList) conn.do_job_get(Edge.getLastStepVehicleIDs(roadId));
+
+//                        System.out.println(vehicleId + " is on road with id: " + roadId + " on lane: " + ownLaneId + ", " + ownLaneIndex + " at " + ownPositionOnLane + " meter");
+
+                        findNeighbours(vehiclesIds, ownLaneIndex, ownPositionOnLane);
+
+                        //TODO: tutaj dalsza implementacja
+
+                        if (frontVehicles[RoadPosition.CENTER.ordinal()] != null) {
+                            String frontVehId = frontVehicles[RoadPosition.CENTER.ordinal()];
+                            double frontVehiclePosition = (double) conn.do_job_get(Vehicle.getLanePosition(frontVehId));
+                            double distanceBetweenVehicles = Math.abs(frontVehiclePosition - ownPositionOnLane);
+//                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
+
+                            double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
+                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId));
+
+
+
+                            double timeToCollision = (Math.sqrt(Math.pow(tempSpeed, 2) - 2 * tempAccel * distanceBetweenVehicles) - tempSpeed) / tempAccel;
+
+                            System.out.println();
+                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Collision occur in" + timeToCollision + " seconds.");
+                            System.out.println();
+                        }
+
+//                        System.out.println();
+//                        for (String name: vehiclesIds) {
+//                            if (!name.equals(vehicleId)) {
+//                                SumoPosition2D position = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(name));
+//                                double distance = Utils.distance(ownPosition, position);
+//                                System.out.print("Distance between " + vehicleId + " and " + name + " is equal: " + distance);
+//                                System.out.println();
+//                            }
+//                        }
+//                        System.out.println();
+
+                        resetNeighbours();
+
+                    } else {
+                        myAgent.removeBehaviour(this);
+                    }
+                } catch (IllegalStateException i) {
+//                    System.out.println("Connection is closed");
+                }  catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        addBehaviour(tickerBehaviour); //TODO: tutaj
+
+        addBehaviour(prepareReceiverBehaviour());
+    }
+
+    private CyclicBehaviour prepareReceiverBehaviour() {
+        return new CyclicBehaviour(this) {
             public void action() {
                 ACLMessage msg = receive();
                 if (msg != null) {
@@ -160,16 +215,12 @@ public class VehicleAgent extends Agent {
                 }
                 block();
             }
-        });
+        };
     }
 
     private void parseMessage(SimpleMessage sm) {
         switch (sm.getEvent()) {
             case DefaultAgentMessages.DESTROY: {
-//                System.out.println(vehicleId + "is going down");
-//                exitCount++;
-//                System.out.println("Liczba pojazdów usunuetych z symulacji: " + exitCount);
-//                System.out.println();
                 doDelete();
                 break;
             }
@@ -205,10 +256,10 @@ public class VehicleAgent extends Agent {
                 }
             }
 
-            System.out.println();
-            System.out.print(vehicleId + " is on lane with index: " + ownLaneIndex + " and is circled by: " + Arrays.toString(frontVehicles)
-            + ", " + Arrays.toString(backVehicles));
-            System.out.println();
+//            System.out.println();
+//            System.out.print(vehicleId + " is on lane with index: " + ownLaneIndex + " and is circled by: " + Arrays.toString(frontVehicles)
+//            + ", " + Arrays.toString(backVehicles));
+//            System.out.println();
 
         } catch (IllegalStateException i) {
 //                    System.out.println("Connection is closed");
