@@ -2,26 +2,54 @@ package agents;
 
 import de.tudresden.sumo.cmd.Simulation;
 import de.tudresden.sumo.cmd.Vehicle;
+import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
 import it.polito.appeal.traci.TraCIException;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
+import jade.lang.acl.ACLMessage;
+import javafx.application.Platform;
+import managers.AgentsEnvironmentManager;
+import utils.DefaultAgentMessages;
+import utils.DefaultAgentName;
+import utils.SimpleMessage;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SimulationAgent extends Agent {
 
     static String sumo_bin = "/opt/local/bin/sumo-gui";
     static final String config_file = "/Users/tobiao/dev/projects/TrafficMAS/src/main/simulation/config.sumo.cfg";
 
+    private AgentsEnvironmentManager aem;
+    private ArrayList<String> agentsIds = new ArrayList<>();
+    //start Simulation
+    private SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
+    private int finalStep = 4000;
+    private int currentStep = 0;
+
     protected void setup() {
         parseArguments();
+        setupSimulation();
         setupBehaviours();
+    }
 
-        //        //start Simulation
-        SumoTraciConnection conn = new SumoTraciConnection(sumo_bin, config_file);
-//
-//        //set some options
-        conn.addOption("step-length", "0.1"); //timestep 100 ms
+    private void parseArguments() {
+        Object[] args = getArguments();
+        if (args != null) {
+            aem = (AgentsEnvironmentManager) args[0];
+//            longitude = (double) args[2];
+        }
+    }
 
-        try{
+    private void setupSimulation() {
+        //        set some options
+        conn.addOption("step-length", "0.02"); //timestep 200 ms
+
+        try {
 
             //start TraCI
             conn.runServer();
@@ -29,36 +57,10 @@ public class SimulationAgent extends Agent {
             //load routes and initialize the simulation
             conn.do_timestep();
 
-            for(int i=0; i<3600; i++){
-
-                //current simulation time
-                int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
-
-                conn.do_job_set(Vehicle.add("veh"+i, "car", "s1", simtime, 0, 13.8, (byte) 1));
-                conn.do_job_set(Vehicle.setMinGap("veh"+i, 5));
-
-                conn.do_timestep();
-
-                Object v = conn.do_job_get(Vehicle.getMaxSpeed("veh" + i));
-                System.out.println(v);
-
-            }
-
-            //stop TraCI
-            conn.close();
-
-        } catch (TraCIException traCIException) {
-            traCIException.printStackTrace();
+        } catch (IOException ioexception) {
+            ioexception.printStackTrace();
         } catch(Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void parseArguments() {
-        Object[] args = getArguments();
-        if (args != null) {
-//            latitude = (double) args[1];
-//            longitude = (double) args[2];
         }
     }
 
@@ -79,21 +81,75 @@ public class SimulationAgent extends Agent {
 //        });
 //
 //
-//        addBehaviour(new TickerBehaviour(this, 1000) {
-//            @Override
-//            protected void onTick() {
-//
-//                Platform.runLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-////                        LatLong currentCoordinates = new LatLong(current.latitude, current.longitude);
-////                        LatLong lastCoordinates = new LatLong(last.latitude, last.longitude);
-//////                        mm.drawDot(currentCoordinates);
-////                        mm.drawLine(lastCoordinates, currentCoordinates, currentColor);
-//                    }
-//                });
-//            }
-//        });
+
+        addBehaviour(new TickerBehaviour(this, 25) {
+            @Override
+            protected void onTick() {
+                try {
+
+                    //current simulation time
+                    int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
+
+                    if (currentStep !=  finalStep && currentStep % 100 == 0) {
+
+                        String vehId = "veh" + currentStep;
+                        agentsIds.add(vehId);
+
+                        conn.do_job_set(Vehicle.add(vehId, "car", "s1", simtime, 0, 11.7, (byte) 0));
+
+                        Object[] parameters = { vehId, conn };
+
+                        aem.addAgentToMainContainer(vehId, VehicleAgent.class.getName(), parameters);
+
+//                        conn.do_job_set(Vehicle.setSpeed(vehId, 2));
+//                        conn.do_job_set(Vehicle.changeLane(vehId, (byte) 1, 1000));
+
+//                        conn.do_job_set(Vehicle.slowDown(vehId, 2, 1000));
+                    }
+
+                    conn.do_timestep();
+
+                    try {
+                        SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
+//                        for (String name: v) {
+//                            double currentSpeed = (double) conn.do_job_get(Vehicle.getSpeed(name));
+//                            System.out.println(name + " pedzi: " + currentSpeed);
+//                        }
+
+
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.addAll(agentsIds);
+                        temp.removeAll(v);
+
+                        if (!temp.isEmpty()) {
+                            for (String agentName: temp) {
+                                System.out.println("Do usuniecia: " + agentName);
+                                sendMessage(agentName, DefaultAgentMessages.DESTROY);
+                            }
+                            agentsIds.removeAll(temp);
+                        }
+
+                    } catch (TraCIException traCIException) {
+//                    traCIException.printStackTrace();
+                    }
+
+                    //stop TraCI
+                    if (currentStep == finalStep) {
+                        conn.close();
+                        myAgent.doDelete();
+                    } else {
+                        currentStep++;
+                    }
+
+                } catch (IOException ioexception) {
+                    ioexception.printStackTrace();
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+
 //        addBehaviour(new CyclicBehaviour(this) {
 //            public void action() {
 //                ACLMessage msg = receive();
@@ -102,7 +158,7 @@ public class SimulationAgent extends Agent {
 //                        @Override
 //                        public void action() {
 //                            try {
-//                                ACLMessage msghg = new ACLMessage(ACLMessage.INFORM);
+//                                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 //                                SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), CustomGuiEvent.DELETE_AGENT);
 //                                msg.setContentObject(sm);
 //                                msg.addReceiver(new AID(DefaultAgentName.CUSTOM_GUI_AGENT, AID.ISLOCALNAME));
@@ -118,5 +174,23 @@ public class SimulationAgent extends Agent {
 //            }
 //        });
 
+    }
+
+    private void sendMessage(String agentName, int event) {
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
+                try {
+                    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+//                    SimpleMessage sm = new SimpleMessage(this.getAgent().getAID().getLocalName(), event);
+                    SimpleMessage sm = new SimpleMessage("hehe", event); //TODO: change message object
+                    msg.setContentObject(sm);
+                    msg.addReceiver(new AID(agentName, AID.ISLOCALNAME));
+                    send(msg);
+                } catch (IOException e) {
+                    System.out.println("Exception in SimulationAgent ");
+                }
+            }
+        });
     }
 }

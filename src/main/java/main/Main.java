@@ -1,6 +1,5 @@
 package main;
 
-import agents.HelloAgent;
 import agents.SimulationAgent;
 import managers.AgentsEnvironmentManager;
 
@@ -20,7 +19,8 @@ public class Main {
             System.out.println("Agents container failure");
             System.exit(0);
         } finally {
-            aem.addAgentToMainContainer("Hello agent", SimulationAgent.class.getName(), null);
+            Object[] parameters = { aem };
+            aem.addAgentToMainContainer("Hello agent", SimulationAgent.class.getName(), parameters);
         }
     }
 }
