@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+
 public class VehicleAgent extends Agent {
 
     private String vehicleId;
@@ -72,7 +73,7 @@ public class VehicleAgent extends Agent {
 //        });
 //
 //
-        TickerBehaviour tickerBehaviour = new TickerBehaviour(this, 20) {
+        TickerBehaviour tickerBehaviour = new TickerBehaviour(this, 10) {
             @Override
             protected void onTick() {
                 try {
@@ -90,6 +91,16 @@ public class VehicleAgent extends Agent {
 
                         findNeighbours(vehiclesIds, ownLaneIndex, ownPositionOnLane);
 
+                        //TODO: tutaj dalsza implementacja
+
+                        if (frontVehicles[RoadPosition.CENTER.ordinal()] != null) {
+                            String frontVehId = frontVehicles[RoadPosition.CENTER.ordinal()];
+                            double frontVehiclePosition = (double) conn.do_job_get(Vehicle.getLanePosition(frontVehId));
+                            double distanceBetweenVehicles = Math.abs(frontVehiclePosition - ownPositionOnLane);
+                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
+
+                        }
+
 //                        System.out.println();
 //                        for (String name: vehiclesIds) {
 //                            if (!name.equals(vehicleId)) {
@@ -100,6 +111,8 @@ public class VehicleAgent extends Agent {
 //                            }
 //                        }
 //                        System.out.println();
+
+                        resetNeighbours();
 
                     } else {
                         myAgent.removeBehaviour(this);
@@ -197,14 +210,16 @@ public class VehicleAgent extends Agent {
             + ", " + Arrays.toString(backVehicles));
             System.out.println();
 
-            frontVehicles = new String[5];
-            backVehicles = new String[5];
-
         } catch (IllegalStateException i) {
 //                    System.out.println("Connection is closed");
         }  catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void resetNeighbours() {
+        frontVehicles = new String[5];
+        backVehicles = new String[5];
     }
 
     private LaneDistance getUpdatedNearestVehicleDistance(String vehicleId, int lanePosition, double positionOnLane, double ownPositionOnLane, double distanceFront, double distanceBack) {

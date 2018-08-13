@@ -47,7 +47,7 @@ public class SimulationAgent extends Agent {
 
     private void setupSimulation() {
         //        set some options
-        conn.addOption("step-length", "0.05"); //timestep 200 ms
+        conn.addOption("step-length", "0.02"); //timestep 200 ms
 
         try {
 
@@ -82,7 +82,7 @@ public class SimulationAgent extends Agent {
 //
 //
 
-        addBehaviour(new TickerBehaviour(this, 1) {
+        addBehaviour(new TickerBehaviour(this, 25) {
             @Override
             protected void onTick() {
                 try {
