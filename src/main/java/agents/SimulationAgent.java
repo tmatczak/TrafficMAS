@@ -10,7 +10,6 @@ import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
-import javafx.application.Platform;
 import managers.AgentsEnvironmentManager;
 import utils.DefaultAgentMessages;
 import utils.DefaultAgentName;
@@ -21,8 +20,13 @@ import java.util.ArrayList;
 
 public class SimulationAgent extends Agent {
 
-    static String sumo_bin = "/opt/local/bin/sumo-gui";
-    static final String config_file = "/Users/tobiao/dev/projects/TrafficMAS/src/main/simulation/config.sumo.cfg";
+    // OSX PATHS
+//    static String sumo_bin = "/opt/local/bin/sumo-gui";
+//    static final String config_file = "/Users/tobiao/dev/projects/TrafficMAS/src/main/simulation/config.sumo.cfg";
+
+    // WINDOWS PATHS
+    static String sumo_bin = "C:/Users/tobia/pmag/sumo-0.32.0/bin/sumo-gui";
+    static final String config_file = "C:/Users/tobia/pmag/TrafficMAS/src/main/simulation/config.sumo.cfg";
 
     private AgentsEnvironmentManager aem;
     private ArrayList<String> agentsIds = new ArrayList<>();

@@ -9,8 +9,8 @@
         <module name="TrafficMAS" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="TrafficMAS" target="9" />
+    <bytecodeTargetLevel target="10">
+      <module name="TrafficMAS" target="10" />
     </bytecodeTargetLevel>
   </component>
 </project>
