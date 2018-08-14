@@ -93,6 +93,8 @@ public class SimulationAgent extends Agent {
                 try {
                     //current simulation time
                     int simtime = (int) conn.do_job_get(Simulation.getCurrentTime());
+//                    conn.do_job_get(Simulation.getLoadedIDList()); // TODO: for fixing adding and removing agents
+//                    conn.do_job_get(Simulation.getDepartedIDList());
 
                     if (currentStep !=  finalStep && currentStep % NEW_VEHICLE_INTERVAL == 0) {
                         addNewVehicleToSimulation(simtime);

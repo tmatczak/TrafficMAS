@@ -154,13 +154,15 @@ public class VehicleAgent extends Agent {
                             double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
                             double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId));
 
-
-
                             double timeToCollision = (Math.sqrt(Math.pow(tempSpeed, 2) - 2 * tempAccel * distanceBetweenVehicles) - tempSpeed) / tempAccel;
 
                             System.out.println();
                             System.out.println(frontVehId + " is in front of: " + vehicleId + ". Collision occur in" + timeToCollision + " seconds.");
                             System.out.println();
+                        } else {
+                            double laneLength = (double) conn.do_job_get(Lane.getLength(ownLaneId));
+                            double remainingDistance = laneLength - ownPositionOnLane;
+
                         }
 
 //                        System.out.println();
@@ -281,7 +283,13 @@ public class VehicleAgent extends Agent {
             double velocity1 = (- REACTION_TIME - Math.sqrt(delta))/(2 * (1 / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY)));
             double velocity2 = (- REACTION_TIME + Math.sqrt(delta))/(2 * (1 / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY)));
 
-            return 0.0;
+            if (velocity1 > 0) {
+                return velocity1;
+            } else if (velocity2 > 0) {
+                return  velocity2;
+            } else {
+                return 0.0;
+            }
         }
     }
 
@@ -300,5 +308,36 @@ public class VehicleAgent extends Agent {
         }
 
         return new LaneDistance(0, 0);
+    }
+
+    private String findTrafficlightIdForLane(String laneId) throws Exception {
+        SumoStringList trafficlightsIds = (SumoStringList) conn.do_job_get(Trafficlight.getIDList());
+        for (String tlId : trafficlightsIds) {
+            SumoStringList controlledLanesIds =  (SumoStringList) conn.do_job_get(Trafficlight.getControlledLanes(tlId));
+            if (controlledLanesIds.contains(laneId)) {
+                return tlId;
+            }
+        }
+
+        return null;
+    }
+
+    private LightPhase getLightPhaseOfTrafficlightOnLane(String laneId) throws  Exception {
+        String trafficlightId = findTrafficlightIdForLane(laneId);
+        if (trafficlightId != null) {
+            int phaseId = (int) conn.do_job_get(Trafficlight.getPhase(trafficlightId));
+            switch (phaseId) {
+                case 0:
+                    return LightPhase.GREEN;
+                case 1:
+                    return LightPhase.YELLOW;
+                case 2:
+                    return LightPhase.RED;
+                default:
+                    return LightPhase.OTHER;
+            }
+        } else {
+            return LightPhase.OTHER;
+        }
     }
 }
