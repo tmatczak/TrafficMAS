@@ -1,6 +1,9 @@
 package agents;
 
 import de.tudresden.sumo.cmd.*;
+import de.tudresden.ws.container.SumoLink;
+import de.tudresden.ws.container.SumoLinkList;
+import de.tudresden.ws.container.SumoNextTLS;
 import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
 import jade.core.Agent;
@@ -76,42 +79,34 @@ public class VehicleAgent extends Agent {
 
                         String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
                         int ownLaneIndex = (int) conn.do_job_get(Vehicle.getLaneIndex(vehicleId));
+                        String ownLaneId = (String) conn.do_job_get(Vehicle.getLaneID(vehicleId));
                         double ownPositionOnLane = (double) conn.do_job_get(Vehicle.getLanePosition(vehicleId));
                         SumoStringList vehiclesIds = (SumoStringList) conn.do_job_get(Edge.getLastStepVehicleIDs(roadId));
-
-//                        System.out.println(vehicleId + " is on road with id: " + roadId + " on lane: " + ownLaneId + ", " + ownLaneIndex + " at " + ownPositionOnLane + " meter");
 
                         findNeighbours(vehiclesIds, ownLaneIndex, ownPositionOnLane);
 
                         //TODO: tutaj dalsza implementacja
 
                         if (frontVehicles[RoadPosition.CENTER.ordinal()] != null) {
-                            String frontVehId = frontVehicles[RoadPosition.CENTER.ordinal()];
-                            double frontVehiclePosition = (double) conn.do_job_get(Vehicle.getLanePosition(frontVehId));
-                            double distanceBetweenVehicles = Math.abs(frontVehiclePosition - ownPositionOnLane);
-//                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
-
-                            double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
-                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId)); // useless
-
-                            double timeToCollision = distanceBetweenVehicles / tempSpeed;
-
-                            System.out.println();
-                            System.out.println(vehicleId + " speed: " + tempSpeed + " and acceleration: " + tempAccel + ", distance is equal to: " + distanceBetweenVehicles);
-                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Collision occur in " + timeToCollision + " seconds.");
-                            System.out.println();
+//                            String frontVehId = frontVehicles[RoadPosition.CENTER.ordinal()];
+//                            double frontVehiclePosition = (double) conn.do_job_get(Vehicle.getLanePosition(frontVehId));
+//                            double distanceBetweenVehicles = Math.abs(frontVehiclePosition - ownPositionOnLane);
+//
+//                            double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
+//                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId)); // useless
+//
+//                            double timeToCollision = distanceBetweenVehicles / tempSpeed;
+//
+//                            double stopDistance = calculateStopDistance(tempSpeed);
+//
+//                            double calculatedVelocity = (stopDistance <= distanceBetweenVehicles) ? calculateMaximumVelocity(distanceBetweenVehicles) : 0.0;
+//                            conn.do_job_set(Vehicle.setSpeed(vehicleId, calculatedVelocity));
+//
+//                            System.out.println("Stop distance for vehicle: " + vehicleId + " is equal to " + stopDistance + " meters. Maximum velocity for given distance is " + calculatedVelocity);
+                        } else {
+                            LightPhase phase = getLightPhaseOfTrafficlightOnLane(ownLaneId);
+//                            System.out.println(phase);
                         }
-
-//                        System.out.println();
-//                        for (String name: vehiclesIds) {
-//                            if (!name.equals(vehicleId)) {
-//                                SumoPosition2D position = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(name));
-//                                double distance = Utils.distance(ownPosition, position);
-//                                System.out.print("Distance between " + vehicleId + " and " + name + " is equal: " + distance);
-//                                System.out.println();
-//                            }
-//                        }
-//                        System.out.println();
 
                         resetNeighbours();
 
@@ -152,29 +147,16 @@ public class VehicleAgent extends Agent {
 //                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
 
                             double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
-                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId));
 
-                            double timeToCollision = (Math.sqrt(Math.pow(tempSpeed, 2) - 2 * tempAccel * distanceBetweenVehicles) - tempSpeed) / tempAccel;
 
-                            System.out.println();
-                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Collision occur in" + timeToCollision + " seconds.");
-                            System.out.println();
+
+
+
                         } else {
                             double laneLength = (double) conn.do_job_get(Lane.getLength(ownLaneId));
                             double remainingDistance = laneLength - ownPositionOnLane;
 
                         }
-
-//                        System.out.println();
-//                        for (String name: vehiclesIds) {
-//                            if (!name.equals(vehicleId)) {
-//                                SumoPosition2D position = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(name));
-//                                double distance = Utils.distance(ownPosition, position);
-//                                System.out.print("Distance between " + vehicleId + " and " + name + " is equal: " + distance);
-//                                System.out.println();
-//                            }
-//                        }
-//                        System.out.println();
 
                         resetNeighbours();
 
@@ -322,17 +304,29 @@ public class VehicleAgent extends Agent {
         return null;
     }
 
-    private LightPhase getLightPhaseOfTrafficlightOnLane(String laneId) throws  Exception {
+    private LightPhase getLightPhaseOfTrafficlightOnLane(String laneId) throws  Exception { //TODO:
         String trafficlightId = findTrafficlightIdForLane(laneId);
         if (trafficlightId != null) {
-            int phaseId = (int) conn.do_job_get(Trafficlight.getPhase(trafficlightId));
-            switch (phaseId) {
-                case 0:
-                    return LightPhase.GREEN;
-                case 1:
-                    return LightPhase.YELLOW;
-                case 2:
-                    return LightPhase.RED;
+            String state = (String) conn.do_job_get(Trafficlight.getRedYellowGreenState(trafficlightId));
+
+            SumoNextTLS tls = (SumoNextTLS) conn.do_job_get(Vehicle.getNextTLS(vehicleId));
+
+            for(SumoNextTLS.NextTLS temp: tls.ll) {
+                System.out.println(temp.tlsID);
+            }
+//            SumoLinkList links = (SumoLinkList) conn.do_job_get(Lane.getLinks(laneId));
+//            for (SumoLink link : links) {
+//                System.out.println(link.isOpen);
+//            }
+
+            System.out.println("Current phase index: " + tls);
+            switch (state) {
+//                case 0:
+//                    return LightPhase.GREEN;
+//                case 1:
+//                    return LightPhase.YELLOW;
+//                case 2:
+//                    return LightPhase.RED;
                 default:
                     return LightPhase.OTHER;
             }
