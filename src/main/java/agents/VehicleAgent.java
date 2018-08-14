@@ -1,25 +1,19 @@
 package agents;
 
 import de.tudresden.sumo.cmd.*;
-import de.tudresden.ws.container.SumoPosition2D;
 import de.tudresden.ws.container.SumoStringList;
 import it.polito.appeal.traci.SumoTraciConnection;
-import it.polito.appeal.traci.TraCIException;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import utils.*;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
-
 public class VehicleAgent extends Agent {
+
+    private static final double REACTION_TIME = 1.0; // in seconds
+    private static final double FRICTION_COEFFICIENT = 0.8;
 
     private String vehicleId;
     private SumoTraciConnection conn;
@@ -79,10 +73,8 @@ public class VehicleAgent extends Agent {
                 try {
                     SumoStringList v = (SumoStringList) conn.do_job_get(Vehicle.getIDList());
                     if (v.contains(vehicleId)) {
-                        String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
 
-//                        SumoPosition2D ownPosition = (SumoPosition2D) conn.do_job_get(Vehicle.getPosition(vehicleId));
-                        String ownLaneId = (String) conn.do_job_get(Vehicle.getLaneID(vehicleId));
+                        String roadId = (String) conn.do_job_get(Vehicle.getRoadID(vehicleId));
                         int ownLaneIndex = (int) conn.do_job_get(Vehicle.getLaneIndex(vehicleId));
                         double ownPositionOnLane = (double) conn.do_job_get(Vehicle.getLanePosition(vehicleId));
                         SumoStringList vehiclesIds = (SumoStringList) conn.do_job_get(Edge.getLastStepVehicleIDs(roadId));
@@ -100,9 +92,8 @@ public class VehicleAgent extends Agent {
 //                            System.out.println(frontVehId + " is in front of: " + vehicleId + ". Distance between:" + distanceBetweenVehicles + " meters.");
 
                             double tempSpeed = (double) conn.do_job_get(Vehicle.getSpeed(vehicleId));
-                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId));
+                            double tempAccel = (double) conn.do_job_get(Vehicle.getAccel(vehicleId)); // useless
 
-//                            double timeToCollision = (Math.sqrt(Math.pow(tempSpeed, 2) - 2 * tempAccel * distanceBetweenVehicles) - tempSpeed) / tempAccel;
                             double timeToCollision = distanceBetweenVehicles / tempSpeed;
 
                             System.out.println();
@@ -271,6 +262,27 @@ public class VehicleAgent extends Agent {
     private void resetNeighbours() {
         frontVehicles = new String[5];
         backVehicles = new String[5];
+    }
+
+    private double calculateStopDistance(double velocity) {
+        return velocity * REACTION_TIME + (Math.pow(velocity, 2) / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY));
+    }
+
+    private double calculateMaximumVelocity(double stopDistance) {
+
+        double delta = Math.pow(REACTION_TIME, 2) - 4 * (1 / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY)) * (-stopDistance);
+
+        if (delta < 0) {
+            return 0.0;
+        } else if (delta == 0) {
+            return ((- REACTION_TIME)/(2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY));
+        } else {
+
+            double velocity1 = (- REACTION_TIME - Math.sqrt(delta))/(2 * (1 / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY)));
+            double velocity2 = (- REACTION_TIME + Math.sqrt(delta))/(2 * (1 / (2 * FRICTION_COEFFICIENT * Constants.STANDARD_GRAVITY)));
+
+            return 0.0;
+        }
     }
 
     private LaneDistance getUpdatedNearestVehicleDistance(String vehicleId, int lanePosition, double positionOnLane, double ownPositionOnLane, double distanceFront, double distanceBack) {
